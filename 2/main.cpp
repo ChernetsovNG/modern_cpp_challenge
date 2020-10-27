@@ -1,6 +1,9 @@
 #include <iostream>
+#include <numeric>
 
-int gcd(int a, int b);
+unsigned int gcd(unsigned int const a, unsigned int const b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
 
 int main() {
     unsigned int x1, x2;
@@ -9,11 +12,7 @@ int main() {
     std::cout << "Enter a second integer number (>= 0): " << std::endl;
     std::cin >> x2;
 
-    unsigned int res = gcd(x1, x2);
+    unsigned int res = std::gcd(x1, x2);
 
     std::cout << "gcd = " << res << std::endl;
-}
-
-unsigned int gcd(unsigned int a, unsigned int b) {
-    return !b ? a : gcd(b, a % b);
 }
