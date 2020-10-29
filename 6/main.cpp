@@ -1,21 +1,29 @@
 #include <iostream>
+#include <cmath>
 
-int main() {
-    int input;
-    std::cout << "Enter an integer number >= 0: " << std::endl;
-    std::cin >> input;
-
-    for (int i = 1; i <= input; ++i) {
-        // проверяем каждое число на предмет избыточности
-        int sum_of_divisors = 0;
-        for (int k = 1; k < i; ++k) {
-            if (i % k == 0) {  // k является делителем i
-                sum_of_divisors += k;
-            }
-        }
-        if (sum_of_divisors > i) {  // число i - избыточное
-            double redundancy_amount = 1.0 * sum_of_divisors / i;
-            std::cout << "i = " << i << ", redundancy_amount = " << redundancy_amount << std::endl;
+int sum_proper_divisors(int const number) {
+    int result = 1;
+    for (int i = 2; i <= std::sqrt(number); i++) {
+        if (number % i == 0) {
+            result += (i == (number / i)) ? i : (i + number / i);
         }
     }
+    return result;
+}
+
+void print_abundant(int const limit) {
+    for (int number = 10; number <= limit; ++number) {
+        auto sum = sum_proper_divisors(number);
+        if (sum > number) {
+            std::cout << number << ", abundance = " << sum - number << std::endl;
+        }
+    }
+}
+
+int main() {
+    int limit = 0;
+    std::cout << "Enter an integer number >= 0: " << std::endl;
+    std::cin >> limit;
+
+    print_abundant(limit);
 }
