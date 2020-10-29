@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <unordered_set>
 
 int sum_proper_divisors(int const number) {
     int result = 1;
@@ -11,14 +12,27 @@ int sum_proper_divisors(int const number) {
     return result;
 }
 
+struct Hash {
+    int operator()(const std::pair<int, int> &pair) const {
+        int first = pair.first;
+        int second = pair.second;
+        return 31 * first + second;
+    }
+};
+
 int main() {
     int limit = 1'000'000;
-    for (int i = 1; i < limit; ++i) {
-        for (int j = 1; j < limit && j != i; ++j) {
-            int sum_divisors_1 = sum_proper_divisors(i);
-            int sum_divisors_2 = sum_proper_divisors(j);
-            if (sum_divisors_1 == sum_divisors_2) {
-                std::cout << "numbers " << i << " and " << j << " are friends" << std::endl;
+    std::unordered_set<std::pair<int, int>, Hash> set;
+
+    int index = 1;
+    for (int number = 4; number < limit; ++number) {
+        auto sum1 = sum_proper_divisors(number);
+        if (sum1 < limit) {
+            auto sum2 = sum_proper_divisors(sum1);
+            if (sum2 == number && number != sum1 && !set.count(std::make_pair(sum1, number))) {
+                set.insert(std::make_pair(sum1, number));
+                set.insert(std::make_pair(number, sum1));
+                std::cout << index++ << ": " << number << "," << sum1 << std::endl;
             }
         }
     }
