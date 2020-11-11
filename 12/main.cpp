@@ -1,31 +1,47 @@
 #include <iostream>
 #include <vector>
 
-std::vector<int> collatz(int n) {
-    std::vector<int> result;
-    int k = n;
+void print_collatz(long long n) {
+    long long k = n;
     while (k != 1) {
-        result.push_back(k);
+        std::cout << k << ' ';
         if (k % 2 == 0) {
             k /= 2;
         } else {
             k = 3 * k + 1;
         }
     }
-    result.push_back(1);
-    return result;
+    std::cout << 1 << std::endl;
+}
+
+std::pair<unsigned long long, long> longest_collatz(unsigned long long const limit) {
+    long length = 0;
+    unsigned long long number = 0;
+    std::vector<int> cache(limit + 1, 0);
+
+    for (unsigned long long i = 2; i <= limit; i++) {
+        auto n = i;
+        long steps = 0;
+        while (n != 1 && n >= i) {
+            if ((n % 2) == 0) n /= 2;
+            else n = n * 3 + 1;
+            steps++;
+        }
+        cache[i] = steps + cache[n];
+        if (cache[i] > length) {
+            length = cache[i];
+            number = i;
+        }
+    }
+
+    return std::make_pair(number, length);
 }
 
 int main() {
-    int max_n = 0;
-    int max_size = 0;
-    for (int i = 2; i < 1'000'000; ++i) {
-        const std::vector<int> &res = collatz(i);
-        auto size = res.size();
-        if (size > max_size) {
-            max_n = i;
-            max_size = size;
-        }
-    }
-    std::cout << max_n << " " << max_size << std::endl;
+    auto pair = longest_collatz(1'000'000);
+    auto number = pair.first;
+    auto length = pair.second;
+    std::cout << "number = " << number << ", length = " << length << std::endl;
+
+    print_collatz(number);
 }
