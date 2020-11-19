@@ -15,6 +15,7 @@ add_executable(problem_10 10/main.cpp)
 add_executable(problem_11 11/main.cpp)
 add_executable(problem_12 12/main.cpp)
 add_executable(problem_13 13/main.cpp)
+add_executable(problem_14 14/main.cpp)
 
 set_target_properties(
         problem_1
@@ -30,6 +31,7 @@ set_target_properties(
         problem_11
         problem_12
         problem_13
+        problem_14
         PROPERTIES
         CXX_STANDARD 20
         CXX_STANDARD_REQUIRED ON
